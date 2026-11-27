@@ -1,0 +1,40 @@
+name: Fajr
+options:
+  bundleIdPrefix: com.mahmoud
+  deploymentTarget:
+    iOS: "26.0"
+targets:
+  Fajr:
+    type: application
+    platform: iOS
+    sources:
+      - Fajr
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mahmoud.fajr
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        SWIFT_VERSION: "6.0"
+        SWIFT_STRICT_CONCURRENCY: minimal
+        TARGETED_DEVICE_FAMILY: "1"
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: "الفجر"
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_NSCameraUsageDescription: "لتصوير المكان اللي بيوقف منبه الفجر"
+        INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "لحساب مواعيد الصلاة لمكانك"
+        INFOPLIST_KEY_NSAlarmKitUsageDescription: "عشان الأذان يرن حتى لو الموبايل صامت"
+        INFOPLIST_KEY_CFBundleDevelopmentRegion: ar
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGN_IDENTITY: ""
+    info:
+      path: Fajr/Info.plist
+      properties:
+        UIBackgroundModes: [fetch]
+        BGTaskSchedulerPermittedIdentifiers: [com.mahmoud.fajr.refresh]
+        CFBundleDisplayName: "الفجر"
+        NSCameraUsageDescription: "لتصوير المكان اللي بيوقف منبه الفجر"
+        NSLocationWhenInUseUsageDescription: "لحساب مواعيد الصلاة لمكانك"
+        NSAlarmKitUsageDescription: "عشان الأذان يرن حتى لو الموبايل صامت"
+        UILaunchScreen: {}
