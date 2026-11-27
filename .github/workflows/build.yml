@@ -1,0 +1,43 @@
+name: Build IPA
+on:
+  push:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select Xcode
+        run: |
+          ls /Applications | grep Xcode
+          sudo xcode-select -s "$(ls -d /Applications/Xcode*.app | sort -V | tail -1)"
+          xcodebuild -version
+      - name: Generate project
+        run: brew install xcodegen && xcodegen generate
+      - name: Build
+        run: |
+          set -o pipefail
+          xcodebuild -project Fajr.xcodeproj -scheme Fajr -configuration Release \
+            -sdk iphoneos -destination 'generic/platform=iOS' \
+            -derivedDataPath build CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            build 2>&1 | tee build.log | grep -E "error:|warning: .*deprecated|BUILD" || true
+          test -d build/Build/Products/Release-iphoneos/Fajr.app
+      - name: Package
+        run: |
+          mkdir Payload
+          cp -R build/Build/Products/Release-iphoneos/Fajr.app Payload/
+          zip -qry Fajr.ipa Payload
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Fajr
+          path: |
+            Fajr.ipa
+            build.log
+      - uses: softprops/action-gh-release@v2
+        if: success()
+        with:
+          tag_name: latest
+          files: Fajr.ipa
